@@ -41,14 +41,14 @@ main ─────────────────────────
 
 | ID | Módulo | Estado | Responsable | Verificación |
 |----|--------|--------|-------------|-------------|
-| F1.1 | Scaffolding NestJS 11 + TypeORM 1.1 + MySQL | ⬜ | Backend | `npm run start:dev` sin errores |
-| F1.2 | ConfigModule + variables de entorno (.env) | ⬜ | Backend | `ConfigService` operativo |
-| F1.3 | Entidad User + CreateUserDto | ⬜ | Backend | Registro de usuarios en BD |
-| F1.4 | Módulo Auth (JWT + Bcrypt + Refresh Token) | ⬜ | Backend | `POST /auth/login` devuelve tokens |
-| F1.5 | Guards: JwtAuthGuard + RolesGuard | ⬜ | Backend | Rutas protegidas por rol |
-| F1.6 | ValidationPipe global + ExceptionFilter | ⬜ | Backend | Errores HTTP estandarizados |
-| F1.7 | Seeders: admin, especialidades, categorías | ⬜ | Backend | Datos iniciales en BD |
-| F1.8 | Swagger/OpenAPI configurado | ⬜ | Backend | `GET /api/docs` funcional |
+| F1.1 | Scaffolding NestJS 11 + TypeORM 1.1 + MySQL | ✅ | Backend | `npm run start:dev` sin errores |
+| F1.2 | ConfigModule + variables de entorno (.env) | ✅ | Backend | `ConfigService` operativo |
+| F1.3 | Entidad User + CreateUserDto | ✅ | Backend | Registro de usuarios en BD |
+| F1.4 | Módulo Auth (JWT + Bcrypt + Refresh Token) | ✅ | Backend | `POST /auth/login` devuelve tokens |
+| F1.5 | Guards: JwtAuthGuard + RolesGuard | ✅ | Backend | Rutas protegidas por rol |
+| F1.6 | ValidationPipe global + ExceptionFilter | ✅ | Backend | Errores HTTP estandarizados |
+| F1.7 | Seeders: admin, especialidades, categorías | ✅ | Backend | Datos iniciales en BD |
+| F1.8 | Swagger/OpenAPI configurado | ✅ | Backend | `GET /api/docs` funcional |
 | F1.9 | Esquema DB completo ejecutado | ⬜ | DBA | 15 tablas creadas sin errores |
 
 ---
@@ -195,7 +195,7 @@ main ─────────────────────────
 ## RESUMEN DE PROGRESO
 
 ```
-Fase 1 [Infra + Auth]     ⬜⬜⬜⬜⬜⬜⬜⬜⬜  0/9
+Fase 1 [Infra + Auth]     ✅✅✅✅✅✅✅✅⬜  8/9
 Fase 2 [Catálogos Base]   ⬜⬜⬜⬜⬜⬜         0/6
 Fase 3 [Personal]         ⬜⬜⬜⬜           0/4
 Fase 4 [Turnos + Cobros]  ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜  0/10
@@ -205,7 +205,7 @@ Fase 7 [Frontend Base]    ⬜⬜⬜⬜⬜⬜⬜       0/7
 Fase 8 [Frontend Pages]   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜  0/11
 Fase 9 [Cierre + Prod]    ⬜⬜⬜⬜⬜⬜⬜       0/7
                          ─────────────────
-                         Total: 0/68 módulos
+                         Total: 8/68 módulos
 ```
 
 ---
