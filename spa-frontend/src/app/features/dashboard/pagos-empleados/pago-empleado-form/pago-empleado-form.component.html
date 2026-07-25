@@ -1,0 +1,84 @@
+<div class="fixed inset-0 z-50 flex items-start justify-center pt-10">
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="close.emit()"></div>
+  <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between p-6 border-b">
+      <h2 class="text-xl font-semibold text-spa-dark">{{ pago() ? 'Editar' : 'Nuevo' }} Pago</h2>
+      <button class="text-gray-400 hover:text-gray-600" (click)="close.emit()">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Empleado *</label>
+        <select class="input-spa" formControlName="idEmpleado">
+          <option [value]="0" disabled>Seleccionar empleado</option>
+          @for (e of empleados(); track e.id) {
+            <option [value]="e.id">{{ e.usuario?.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Pago *</label>
+        <input type="date" class="input-spa" formControlName="fechaPago" />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Periodo Inicio *</label>
+          <input type="date" class="input-spa" formControlName="periodoInicio" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Periodo Fin *</label>
+          <input type="date" class="input-spa" formControlName="periodoFin" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Monto Bruto *</label>
+          <input type="number" class="input-spa" formControlName="montoBruto" min="0" step="0.01" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Deducciones</label>
+          <input type="number" class="input-spa" formControlName="deducciones" min="0" step="0.01" />
+        </div>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-3 text-center">
+        <p class="text-sm text-gray-500">Monto Neto</p>
+        <p class="text-xl font-bold text-green-600">$ {{ montoNetoCalculado().toLocaleString('es-AR', { minimumFractionDigits: 2 }) }}</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Metodo de Pago</label>
+          <select class="input-spa" formControlName="metodoPago">
+            <option value="transferencia">Transferencia</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
+          <input type="text" class="input-spa" formControlName="referenciaPago" placeholder="Nro. referencia..." />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+        <textarea class="input-spa" rows="2" formControlName="notas"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-3 border-t">
+        <button type="button" class="btn-spa-secondary" (click)="close.emit()">Cancelar</button>
+        <button type="submit" class="btn-spa-primary" [disabled]="isSubmitting() || form.invalid">
+          {{ isSubmitting() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

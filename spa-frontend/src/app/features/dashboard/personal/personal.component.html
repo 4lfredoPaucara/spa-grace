@@ -1,0 +1,48 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Personal</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nuevo Empleado</button>
+  </div>
+  <app-search-input [(value)]="search" placeholder="Buscar empleados..." (valueChange)="search.set($event); page.set(1); load()" />
+  @if (loading()) { <app-loading-spinner [loading]="true" /> }
+  @else if (error()) { <div class="spa-card p-8 text-center"><p class="text-red-500">{{ error() }}</p><button class="btn-spa-primary mt-3" (click)="load()">Reintentar</button></div> }
+  @else if (empleados().length === 0) { <app-empty-state title="Sin empleados" /> }
+  @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead><tr><th>Nombre</th><th>Email</th><th>Especialidad</th><th>Rol</th><th>Servicios</th><th>Activo</th><th class="text-right">Acciones</th></tr></thead>
+          <tbody>
+            @for (e of empleados(); track e.id) {
+              <tr>
+                <td class="font-medium">{{ e.usuario?.nombre }}</td>
+                <td>{{ e.usuario?.email }}</td>
+                <td>{{ e.especialidad?.nombre || '-' }}</td>
+                <td><span class="spa-badge bg-blue-100 text-blue-700 border-blue-200 capitalize">{{ e.usuario?.rol }}</span></td>
+                <td><div class="flex flex-wrap gap-1">@for (s of e.servicios; track s.id) { <span class="spa-badge bg-purple-50 text-purple-700 border-purple-200 text-xs">{{ s.nombre }}</span> }</div></td>
+                <td><span [class]="e.activo ? 'text-green-600' : 'text-gray-400'">{{ e.activo ? 'Activo' : 'Inactivo' }}</span></td>
+                <td class="text-right">
+                  <button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded mr-1" (click)="openEdit(e)">Editar</button>
+                  <button class="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded" (click)="confirmDelete(e)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (total() > limit()) {
+        <div class="flex items-center justify-between px-4 py-3 border-t">
+          <span class="text-sm text-gray-500">Página {{ page() }} - {{ total() }} resultados</span>
+          <div class="flex gap-2">
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() <= 1" (click)="page.update(p => p-1); load()">Anterior</button>
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() * limit() >= total()" (click)="page.update(p => p+1); load()">Siguiente</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+  @if (showForm()) { <app-empleado-form [empleado]="editingEmpleado()" (close)="onFormClose()" (saved)="onFormSaved()" /> }
+  @if (showConfirm()) {
+    <app-confirm-modal [isOpen]="showConfirm()" title="Eliminar Empleado" [message]="'Estás seguro de eliminar a ' + (deletingEmpleado()?.usuario?.nombre || '') + '?'" confirmText="Eliminar" confirmVariant="danger" (confirm)="executeDelete()" (cancel)="showConfirm.set(false)" />
+  }
+</div>

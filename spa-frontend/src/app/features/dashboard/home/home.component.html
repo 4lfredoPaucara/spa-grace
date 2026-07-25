@@ -1,0 +1,134 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-spa-dark">Dashboard</h1>
+    <p class="text-sm text-gray-500 mt-1">Resumen general del negocio</p>
+  </div>
+
+  @if (loading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="spa-card p-6 animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-24 mb-3"></div>
+          <div class="h-8 bg-gray-200 rounded w-32 mb-2"></div>
+          <div class="h-3 bg-gray-100 rounded w-16"></div>
+        </div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="spa-card p-8 text-center">
+      <p class="text-red-500 mb-3">{{ error() }}</p>
+      <button class="btn-spa-primary" (click)="loadDashboard()">Reintentar</button>
+    </div>
+  } @else if (dashboardData()) {
+    <div class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="spa-card p-6">
+          <p class="text-sm text-gray-500 font-medium">Turnos Hoy</p>
+          @if (dashboardData().turnosPorEstado) {
+            <p class="text-3xl font-bold text-spa-dark mt-1">
+              {{ (dashboardData().turnosPorEstado?.confirmado ?? 0) + (dashboardData().turnosPorEstado?.pendiente ?? 0) }}
+            </p>
+          }
+          <p class="text-xs text-gray-400 mt-1">Activos</p>
+        </div>
+        <div class="spa-card p-6">
+          <p class="text-sm text-gray-500 font-medium">Ingresos Hoy</p>
+          <p class="text-3xl font-bold text-spa-dark mt-1">{{ dashboardData().ingresosHoy?.total ?? 0 | currencyArs }}</p>
+          <p class="text-xs text-gray-400 mt-1">{{ dashboardData().ingresosHoy?.cantidadTurnos ?? 0 }} turnos</p>
+        </div>
+        <div class="spa-card p-6">
+          <p class="text-sm text-gray-500 font-medium">Clientes Nuevos</p>
+          <p class="text-3xl font-bold text-spa-dark mt-1">{{ dashboardData().clientesNuevosMes ?? 0 }}</p>
+          <p class="text-xs text-gray-400 mt-1">Este mes</p>
+        </div>
+        <div class="spa-card p-6">
+          <p class="text-sm text-gray-500 font-medium">Tasa de Ocupación</p>
+          <p class="text-3xl font-bold text-spa-dark mt-1">{{ dashboardData().tasaOcupacionHoy ?? 0 }}%</p>
+          <p class="text-xs text-gray-400 mt-1">Hoy</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        @if (turnosPorEstado().length) {
+          <div class="spa-card p-6">
+            <h3 class="text-lg font-semibold text-spa-dark mb-4">Turnos por Estado</h3>
+            <div class="space-y-3">
+              @for (entry of turnosPorEstado(); track entry.key) {
+                <div class="flex items-center gap-3">
+                  <span class="text-sm text-gray-600 w-28 capitalize">{{ entry.key }}</span>
+                  <div class="flex-1 bg-gray-100 rounded-full h-3">
+                    <div
+                      class="h-3 rounded-full transition-all"
+                      [style.width.%]="getPercentage(entry.value, totalTurnos())"
+                      [class]="getBarColor(entry.key)"
+                    ></div>
+                  </div>
+                  <span class="text-sm font-medium text-spa-dark w-8 text-right">{{ entry.value }}</span>
+                </div>
+              }
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 text-sm text-gray-500">
+              Total: {{ totalTurnos() }} turnos
+            </div>
+          </div>
+        }
+
+        @if (dashboardData().ingresosMes) {
+          <div class="spa-card p-6">
+            <h3 class="text-lg font-semibold text-spa-dark mb-4">Ingresos del Mes</h3>
+            <div class="text-center py-6">
+              <p class="text-4xl font-bold text-spa-primary">{{ dashboardData().ingresosMes.total ?? 0 | currencyArs }}</p>
+              <p class="text-sm text-gray-500 mt-2">Promedio diario: {{ dashboardData().ingresosMes.promedioDiario ?? 0 | currencyArs }}</p>
+            </div>
+          </div>
+        }
+
+        @if (topServicios().length) {
+          <div class="spa-card p-6">
+            <h3 class="text-lg font-semibold text-spa-dark mb-4">Servicios Más Populares</h3>
+            <div class="overflow-x-auto">
+              <table class="spa-table">
+                <thead>
+                  <tr><th>#</th><th>Servicio</th><th>Cantidad</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                  @for (s of topServicios(); track s.servicio; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td class="font-medium">{{ s.servicio }}</td>
+                      <td>{{ s.cantidad }}</td>
+                      <td>{{ s.porcentaje }}%</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+
+        @if (topEmpleados().length) {
+          <div class="spa-card p-6">
+            <h3 class="text-lg font-semibold text-spa-dark mb-4">Top Empleados</h3>
+            <div class="overflow-x-auto">
+              <table class="spa-table">
+                <thead>
+                  <tr><th>#</th><th>Empleado</th><th>Turnos</th><th>Total Gen.</th></tr>
+                </thead>
+                <tbody>
+                  @for (e of topEmpleados(); track e.empleado; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td class="font-medium">{{ e.empleado }}</td>
+                      <td>{{ e.turnosAtendidos }}</td>
+                      <td>{{ e.totalGenerado | currencyArs }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

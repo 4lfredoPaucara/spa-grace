@@ -1,0 +1,65 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Pagos Empleados</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nuevo Pago</button>
+  </div>
+
+  <div class="flex gap-3">
+    <select class="input-spa max-w-xs"
+      [value]="filterEmpleado() || ''"
+      (change)="filterEmpleado.set($any($event.target).value ? +$any($event.target).value : null); page.set(1); load()">
+      <option value="">Todos los empleados</option>
+      @for (e of empleados(); track e.id) {
+        <option [value]="e.id">{{ e.usuario?.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading()) {
+    <app-loading-spinner [loading]="true" />
+  } @else if (items().length === 0) {
+    <app-empty-state title="Sin pagos" />
+  } @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead>
+            <tr>
+              <th>Empleado</th><th>Fecha Pago</th><th>Periodo</th>
+              <th>Bruto</th><th>Deducciones</th><th>Neto</th>
+              <th>Metodo</th><th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of items(); track p.id) {
+              <tr>
+                <td class="font-medium">{{ p.empleado?.usuario?.nombre || p.idEmpleado }}</td>
+                <td>{{ p.fechaPago | readableDate:'short' }}</td>
+                <td class="text-xs">{{ p.periodoInicio | readableDate:'short' }} - {{ p.periodoFin | readableDate:'short' }}</td>
+                <td>{{ p.montoBruto | currencyArs }}</td>
+                <td>{{ p.deducciones | currencyArs }}</td>
+                <td class="font-semibold text-green-600">{{ p.montoNeto | currencyArs }}</td>
+                <td>{{ p.metodoPago || '-' }}</td>
+                <td class="text-right">
+                  <button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded mr-1" (click)="openEdit(p)">Editar</button>
+                  <button class="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded" (click)="confirmDelete(p)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (showForm()) {
+    <app-pago-empleado-form [pago]="editing()" (close)="onFormClose()" (saved)="onFormSaved()" />
+  }
+  @if (showConfirm()) {
+    <app-confirm-modal
+      [isOpen]="showConfirm()" title="Eliminar Pago" message="Estas seguro?"
+      confirmText="Eliminar" confirmVariant="danger"
+      (confirm)="executeDelete()" (cancel)="showConfirm.set(false)"
+    />
+  }
+</div>

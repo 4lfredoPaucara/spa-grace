@@ -1,0 +1,32 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Clientes</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nuevo Cliente</button>
+  </div>
+  <app-search-input [(value)]="search" placeholder="Buscar clientes..." (valueChange)="search.set($event); page.set(1); load()" />
+  @if (loading()) { <app-loading-spinner [loading]="true" /> }
+  @else if (error()) { <div class="spa-card p-8 text-center"><p class="text-red-500">{{ error() }}</p><button class="btn-spa-primary mt-3" (click)="load()">Reintentar</button></div> }
+  @else if (clientes().length === 0) { <app-empty-state title="Sin clientes" /> }
+  @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Dirección</th><th>Notas</th><th class="text-right">Acciones</th></tr></thead>
+          <tbody>
+            @for (c of clientes(); track c.id) {
+              <tr>
+                <td class="font-medium">{{ c.usuario?.nombre }}</td>
+                <td>{{ c.usuario?.email }}</td>
+                <td>{{ c.usuario?.telefono | phone }}</td>
+                <td>{{ c.direccion || '-' }}</td>
+                <td class="max-w-[150px] truncate">{{ c.notasInternas || '-' }}</td>
+                <td class="text-right"><button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded" (click)="openEdit(c)">Editar</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+  @if (showForm()) { <app-cliente-form [cliente]="editingCliente()" (close)="onFormClose()" (saved)="onFormSaved()" /> }
+</div>

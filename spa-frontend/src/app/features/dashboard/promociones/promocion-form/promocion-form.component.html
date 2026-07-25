@@ -1,0 +1,30 @@
+<div class="fixed inset-0 z-50 flex items-start justify-center pt-10">
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="close.emit()"></div>
+  <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between p-6 border-b">
+      <h2 class="text-xl font-semibold text-spa-dark">{{ promocion() ? 'Editar' : 'Nueva' }} Promoción</h2>
+      <button class="text-gray-400 hover:text-gray-600" (click)="close.emit()"><svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Título *</label><input type="text" class="input-spa" formControlName="titulo" /></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Código *</label><input type="text" class="input-spa" formControlName="codigoDescuento" /></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Tipo *</label><select class="input-spa" formControlName="tipoDescuento"><option value="porcentaje">Porcentaje</option><option value="fijo">Fijo</option></select></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Valor *</label><input type="number" class="input-spa" formControlName="valorDescuento" min="0" step="0.01" /></div>
+      </div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Aplica a *</label><select class="input-spa" formControlName="aplicaA"><option value="todos">Todos</option><option value="servicio_especifico">Servicio específico</option><option value="categoria">Categoría</option><option value="cumpleanos">Cumpleaños</option></select></div>
+      @if (form.get('aplicaA')?.value === 'servicio_especifico') { <div><label class="block text-sm font-medium text-gray-700 mb-1">Servicio</label><select class="input-spa" formControlName="idServicioAplicable"><option [value]="0">Seleccionar</option>@for (s of servicios(); track s.id) { <option [value]="s.id">{{ s.nombre }}</option> }</select></div> }
+      @if (form.get('aplicaA')?.value === 'categoria') { <div><label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label><select class="input-spa" formControlName="idCategoriaAplicable"><option [value]="0">Seleccionar</option>@for (c of categorias(); track c.id) { <option [value]="c.id">{{ c.nombre }}</option> }</select></div> }
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label><input type="date" class="input-spa" formControlName="fechaInicio" /></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Fecha Fin</label><input type="date" class="input-spa" formControlName="fechaFin" /></div>
+      </div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label><textarea class="input-spa" rows="2" formControlName="descripcion"></textarea></div>
+      <div class="flex items-center gap-2"><input type="checkbox" formControlName="activo" class="rounded" /><label class="text-sm text-gray-700">Activo</label></div>
+      <div class="flex justify-end gap-3 pt-3 border-t">
+        <button type="button" class="btn-spa-secondary" (click)="close.emit()">Cancelar</button>
+        <button type="submit" class="btn-spa-primary" [disabled]="isSubmitting() || form.invalid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

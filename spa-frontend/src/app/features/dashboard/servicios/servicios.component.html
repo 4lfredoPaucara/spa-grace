@@ -1,0 +1,53 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Servicios</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nuevo Servicio</button>
+  </div>
+  <div class="flex gap-2">
+    <button class="btn-spa-secondary text-sm py-1.5" [class.bg-spa-primary]="!tipoFilter()" [class.text-white]="!tipoFilter()" (click)="tipoFilter.set(''); page.set(1); loadServicios()">Todos</button>
+    <button class="btn-spa-secondary text-sm py-1.5" [class.bg-spa-primary]="tipoFilter() === 'principal'" [class.text-white]="tipoFilter() === 'principal'" (click)="tipoFilter.set('principal'); page.set(1); loadServicios()">Principales</button>
+    <button class="btn-spa-secondary text-sm py-1.5" [class.bg-spa-primary]="tipoFilter() === 'addon'" [class.text-white]="tipoFilter() === 'addon'" (click)="tipoFilter.set('addon'); page.set(1); loadServicios()">Add-ons</button>
+  </div>
+  <app-search-input [(value)]="search" placeholder="Buscar servicios..." (valueChange)="search.set($event); page.set(1); loadServicios()" />
+  @if (loading()) { <app-loading-spinner [loading]="true" /> }
+  @else if (error()) { <div class="spa-card p-8 text-center"><p class="text-red-500">{{ error() }}</p><button class="btn-spa-primary mt-3" (click)="loadServicios()">Reintentar</button></div> }
+  @else if (servicios().length === 0) { <app-empty-state title="Sin servicios" description="No hay servicios registrados" /> }
+  @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead><tr><th>Nombre</th><th>Categoría</th><th>Tipo</th><th>Duración</th><th>Precio</th><th>Activo</th><th class="text-right">Acciones</th></tr></thead>
+          <tbody>
+            @for (s of servicios(); track s.id) {
+              <tr>
+                <td class="font-medium">{{ s.nombre }}</td>
+                <td>{{ s.categoria?.nombre || '-' }}</td>
+                <td><span class="spa-badge" [class]="s.tipo === 'principal' ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-purple-100 text-purple-700 border-purple-200'">{{ s.tipo === 'principal' ? 'Principal' : 'Add-on' }}</span></td>
+                <td>{{ s.duracion }} min</td>
+                <td>{{ s.precio | currencyArs }}</td>
+                <td><span [class]="s.activo ? 'text-green-600' : 'text-gray-400'">{{ s.activo ? 'Activo' : 'Inactivo' }}</span></td>
+                <td class="text-right">
+                  <button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded mr-1" (click)="openEdit(s)">Editar</button>
+                  <button class="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded" (click)="confirmDelete(s)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (total() > limit()) {
+        <div class="flex items-center justify-between px-4 py-3 border-t">
+          <span class="text-sm text-gray-500">Página {{ page() }} - {{ total() }} resultados</span>
+          <div class="flex gap-2">
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() <= 1" (click)="page.update(p => p-1); loadServicios()">Anterior</button>
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() * limit() >= total()" (click)="page.update(p => p+1); loadServicios()">Siguiente</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+  @if (showForm()) { <app-servicio-form [servicio]="editingServicio()" (close)="onFormClose()" (saved)="onFormSaved()" /> }
+  @if (showConfirm()) {
+    <app-confirm-modal [isOpen]="showConfirm()" title="Eliminar Servicio" [message]="'Estás seguro de eliminar ' + (deletingServicio()?.nombre || '') + '?'" confirmText="Eliminar" confirmVariant="danger" (confirm)="executeDelete()" (cancel)="showConfirm.set(false)" />
+  }
+</div>

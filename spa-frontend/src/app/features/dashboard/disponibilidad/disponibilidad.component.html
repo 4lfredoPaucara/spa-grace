@@ -1,0 +1,57 @@
+<div class="space-y-4">
+  <h1 class="text-2xl font-bold text-spa-dark">Disponibilidad</h1>
+
+  <div class="flex items-center gap-4">
+    <select class="input-spa max-w-xs" [value]="selectedEmpleado() || ''" (change)="loadDisponibilidad(+($any($event.target).value))">
+      <option value="" disabled>Seleccionar empleado</option>
+      @for (e of empleados(); track e.id) {
+        <option [value]="e.id">{{ e.usuario?.nombre }}</option>
+      }
+    </select>
+    @if (selectedEmpleado()) {
+      <button class="btn-spa-primary text-sm" (click)="showForm.set(!showForm())">+ Bloque</button>
+    }
+  </div>
+
+  @if (showForm()) {
+    <form [formGroup]="form" (ngSubmit)="addBloque()" class="spa-card p-4 flex flex-wrap gap-3 items-end">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Dia</label>
+        <select class="input-spa w-32" formControlName="diaSemana">
+          @for (d of ['lunes','martes','miercoles','jueves','viernes','sabado','domingo']; track d) {
+            <option [value]="d">{{ d }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Inicio</label>
+        <input type="time" class="input-spa w-32" formControlName="horaInicio" />
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Fin</label>
+        <input type="time" class="input-spa w-32" formControlName="horaFin" />
+      </div>
+      <button type="submit" class="btn-spa-primary">Agregar</button>
+    </form>
+  }
+
+  @if (loading()) {
+    <app-loading-spinner [loading]="true" />
+  } @else if (selectedEmpleado() && disponibilidades().length === 0) {
+    <app-empty-state title="Sin horarios" description="No hay bloques de disponibilidad configurados" />
+  } @else if (selectedEmpleado()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      @for (dia of ['lunes','martes','miercoles','jueves','viernes','sabado','domingo']; track dia) {
+        <div class="spa-card p-4">
+          <h3 class="text-sm font-semibold text-gray-600 capitalize mb-2">{{ dia }}</h3>
+          @for (bloque of getBloquesPorDia(dia); track bloque.id) {
+            <div class="flex items-center justify-between py-1.5 px-2 bg-spa-primary/5 rounded mb-1">
+              <span class="text-sm text-gray-700">{{ bloque.horaInicio }} - {{ bloque.horaFin }}</span>
+              <button class="text-red-400 hover:text-red-600 text-xs" (click)="deleteBloque(bloque.id)">&times;</button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

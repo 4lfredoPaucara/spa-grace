@@ -1,0 +1,19 @@
+export type EstadoTurno = 'pendiente' | 'confirmado' | 'cancelado' | 'atendido' | 'ausente' | 'reprogramado';
+
+export const ESTADO_TURNO_COLORS: Record<EstadoTurno, string> = {
+  pendiente:     'bg-yellow-100 text-yellow-800 border-yellow-200',
+  confirmado:    'bg-blue-100 text-blue-800 border-blue-200',
+  atendido:      'bg-green-100 text-green-800 border-green-200',
+  cancelado:     'bg-red-100 text-red-800 border-red-200',
+  ausente:       'bg-gray-100 text-gray-800 border-gray-200',
+  reprogramado:  'bg-purple-100 text-purple-800 border-purple-200',
+};
+
+export const ESTADO_TURNO_LABELS: Record<EstadoTurno, string> = {
+  pendiente:    'Pendiente',
+  confirmado:   'Confirmado',
+  atendido:     'Atendido',
+  cancelado:    'Cancelado',
+  ausente:      'Ausente',
+  reprogramado: 'Reprogramado',
+};

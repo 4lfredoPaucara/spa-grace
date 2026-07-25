@@ -1,0 +1,33 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Historiales Clínicos</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nuevo Registro</button>
+  </div>
+  <div class="flex gap-3">
+    <input type="text" class="input-spa max-w-xs" placeholder="Buscar por ID de cliente..." [ngModel]="clienteSearch()" (ngModelChange)="clienteSearch.set($event); page.set(1); load()" />
+  </div>
+  @if (loading()) { <app-loading-spinner [loading]="true" /> }
+  @else if (items().length === 0) { <app-empty-state title="Sin registros" description="No hay historiales clínicos registrados" /> }
+  @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead><tr><th>Fecha</th><th>Cliente</th><th>Turno</th><th>Diagnóstico</th><th>Tratamiento</th><th class="text-right">Acciones</th></tr></thead>
+          <tbody>
+            @for (h of items(); track h.id) {
+              <tr>
+                <td>{{ h.fecha | readableDate:'short' }}</td>
+                <td>{{ h.cliente?.nombre || h.idCliente }}</td>
+                <td>{{ h.turno ? '#' + h.turno.id : '-' }}</td>
+                <td class="max-w-[200px] truncate">{{ h.diagnostico || '-' }}</td>
+                <td class="max-w-[200px] truncate">{{ h.tratamiento || '-' }}</td>
+                <td class="text-right"><button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded" (click)="openEdit(h)">Ver/Editar</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+  @if (showForm()) { <app-historial-form [historial]="editing()" (close)="onFormClose()" (saved)="onFormSaved()" /> }
+</div>

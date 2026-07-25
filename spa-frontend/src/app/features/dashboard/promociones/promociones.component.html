@@ -1,0 +1,36 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Promociones</h1>
+    <button class="btn-spa-primary" (click)="openNew()">+ Nueva Promoción</button>
+  </div>
+  @if (loading()) { <app-loading-spinner [loading]="true" /> }
+  @else if (items().length === 0) { <app-empty-state title="Sin promociones" /> }
+  @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead><tr><th>Título</th><th>Código</th><th>Tipo</th><th>Valor</th><th>Vigencia</th><th>Aplica a</th><th>Activo</th><th class="text-right">Acciones</th></tr></thead>
+          <tbody>
+            @for (p of items(); track p.id) {
+              <tr [class.opacity-50]="!p.activo">
+                <td class="font-medium">{{ p.titulo }}</td>
+                <td><code class="bg-gray-100 px-2 py-0.5 rounded text-xs">{{ p.codigoDescuento }}</code></td>
+                <td>{{ p.tipoDescuento === 'porcentaje' ? '%' : 'Fijo' }}</td>
+                <td>{{ p.tipoDescuento === 'porcentaje' ? p.valorDescuento + '%' : '$' + p.valorDescuento }}</td>
+                <td class="text-xs">{{ p.fechaInicio | readableDate:'short' }} - {{ p.fechaFin | readableDate:'short' }}</td>
+                <td class="text-xs capitalize">{{ p.aplicaA?.replace('_', ' ') }}</td>
+                <td><button class="text-xs px-2 py-0.5 rounded" [class.bg-green-100]="p.activo" [class.text-green-700]="p.activo" [class.bg-gray-100]="!p.activo" [class.text-gray-600]="!p.activo" (click)="toggleActivo(p)">{{ p.activo ? 'Activo' : 'Inactivo' }}</button></td>
+                <td class="text-right">
+                  <button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded mr-1" (click)="openEdit(p)">Editar</button>
+                  <button class="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded" (click)="confirmDelete(p)">Eliminar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+  @if (showForm()) { <app-promocion-form [promocion]="editing()" (close)="onFormClose()" (saved)="onFormSaved()" /> }
+  @if (showConfirm()) { <app-confirm-modal [isOpen]="showConfirm()" title="Eliminar Promoción" [message]="'Eliminar ' + (deleting()?.titulo || '') + '?'" confirmText="Eliminar" confirmVariant="danger" (confirm)="executeDelete()" (cancel)="showConfirm.set(false)" /> }
+</div>

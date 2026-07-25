@@ -1,0 +1,140 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-spa-dark">Agenda</h1>
+    <button class="btn-spa-primary" (click)="openNewTurno()">+ Nuevo Turno</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex border-b border-gray-200 gap-1">
+    @for (tab of [{ id: 'activos', label: 'Activos' }, { id: 'atendidos', label: 'Atendidos' }, { id: 'cancelados', label: 'Cancelados/Ausentes' }]; track tab.id) {
+      <button
+        class="px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px"
+        [class]="activeTab() === tab.id ? 'border-spa-primary text-spa-primary' : 'border-transparent text-gray-500 hover:text-gray-700'"
+        (click)="setTab(tab.id)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-wrap items-center gap-3">
+    <div class="flex-1 min-w-[200px] max-w-md">
+      <app-search-input [(value)]="search" placeholder="Buscar por cliente, empleado, servicio..." (valueChange)="onSearch($event)" />
+    </div>
+    <input type="date" class="input-spa w-40" [ngModel]="selectedDate()" (ngModelChange)="onDateChange($event)" />
+    <button class="btn-spa-secondary text-sm" (click)="loadTurnos()">Filtrar</button>
+  </div>
+
+  <!-- Content -->
+  @if (loading()) {
+    <app-loading-spinner [loading]="true" message="Cargando agenda..." />
+  } @else if (error()) {
+    <div class="spa-card p-8 text-center">
+      <p class="text-red-500 mb-3">{{ error() }}</p>
+      <button class="btn-spa-primary" (click)="loadTurnos()">Reintentar</button>
+    </div>
+  } @else if (turnos().length === 0) {
+    <app-empty-state title="Sin turnos" description="No hay turnos en esta categoría" />
+  } @else {
+    <div class="spa-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="spa-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Cliente</th>
+              <th>Empleado</th>
+              <th>Servicios</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th class="text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (turno of turnos(); track turno.id) {
+              <tr>
+                <td>{{ turno.fecha | readableDate:'short' }}</td>
+                <td>{{ turno.hora }} - {{ turno.horaFin }}</td>
+                <td class="font-medium">{{ turno.cliente?.nombre }}</td>
+                <td>{{ turno.empleado?.usuario?.nombre }}</td>
+                <td>
+                  <div class="flex flex-wrap gap-1">
+                    @for (s of turno.servicios; track s.id) {
+                      <span class="spa-badge bg-purple-50 text-purple-700 border-purple-200">{{ s.nombre }}</span>
+                    }
+                  </div>
+                </td>
+                <td>{{ turno.precioTotal | currencyArs }}</td>
+                <td>
+                  <app-status-badge [color]="getEstadoColor(turno.estado)" [label]="getEstadoLabel(turno.estado)" />
+                </td>
+                <td>
+                  <div class="flex items-center justify-end gap-1">
+                    @if (canShowAction(turno, 'confirmar')) {
+                      <button class="text-xs px-2 py-1 text-blue-600 hover:bg-blue-50 rounded" (click)="confirmarTurno(turno)">Confirmar</button>
+                    }
+                    @if (canShowAction(turno, 'atender')) {
+                      <button class="text-xs px-2 py-1 text-green-600 hover:bg-green-50 rounded" (click)="atenderTurno(turno)">Atender</button>
+                    }
+                    @if (canShowAction(turno, 'cancelar')) {
+                      <button class="text-xs px-2 py-1 text-red-600 hover:bg-red-50 rounded" (click)="confirmarCancelar(turno)">Cancelar</button>
+                    }
+                    @if (canShowAction(turno, 'adelanto')) {
+                      <button class="text-xs px-2 py-1 text-yellow-600 hover:bg-yellow-50 rounded" (click)="openPagoAdelanto(turno)">Adelanto</button>
+                    }
+                    @if (canShowAction(turno, 'pago_final')) {
+                      <button class="text-xs px-2 py-1 text-green-600 hover:bg-green-50 rounded" (click)="openPagoFinal(turno)">Cobrar</button>
+                    }
+                    @if (canShowAction(turno, 'reembolso')) {
+                      <button class="text-xs px-2 py-1 text-orange-600 hover:bg-orange-50 rounded" (click)="openReembolso(turno)">Reembolsar</button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      @if (totalPages() > 1) {
+        <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+          <div class="text-sm text-gray-500">
+            Página {{ page() }} de {{ totalPages() }} ({{ total() }} resultados)
+          </div>
+          <div class="flex gap-2">
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() <= 1" (click)="prevPage()">Anterior</button>
+            <select class="input-spa w-16 py-1.5 text-sm" [ngModel]="limit()" (ngModelChange)="limit.set($event); page.set(1); loadTurnos()">
+              <option [value]="7">7</option>
+              <option [value]="10">10</option>
+              <option [value]="15">15</option>
+              <option [value]="25">25</option>
+            </select>
+            <button class="btn-spa-secondary text-sm py-1.5" [disabled]="page() >= totalPages()" (click)="nextPage()">Siguiente</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Modals -->
+  @if (showTurnoForm()) {
+    <app-turno-form (close)="onTurnoFormClose()" (saved)="onTurnoFormSaved()" />
+  }
+  @if (showPagoForm() && turnoForPago()) {
+    <app-pago-form [turno]="turnoForPago()!" [mode]="pagoMode()" (close)="onPagoFormClose()" (saved)="onPagoFormSaved()" />
+  }
+  @if (showConfirm()) {
+    <app-confirm-modal
+      [isOpen]="showConfirm()"
+      [title]="confirmConfig().title"
+      [message]="confirmConfig().message"
+      [confirmText]="'Confirmar'"
+      [confirmVariant]="confirmConfig().variant"
+      (confirm)="executeConfirm()"
+      (cancel)="showConfirm.set(false)"
+    />
+  }
+</div>

@@ -1,0 +1,63 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-spa-primary/10 to-spa-secondary/10 p-4">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-spa-primary text-white text-2xl font-bold mb-4">
+        G
+      </div>
+      <h1 class="text-2xl font-bold text-spa-dark">SpaGrace</h1>
+      <p class="text-sm text-gray-500 mt-1">Sistema de Gestión</p>
+    </div>
+
+    <div class="spa-card p-8">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        @if (errorMessage()) {
+          <div class="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm border border-red-200">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+          <input
+            type="text"
+            formControlName="username"
+            class="input-spa"
+            placeholder="Ingresá tu usuario"
+            autocomplete="username"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <input
+            type="password"
+            formControlName="password"
+            class="input-spa"
+            placeholder="Ingresá tu contraseña"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn-spa-primary w-full"
+          [disabled]="loginForm.invalid || isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              Ingresando...
+            </span>
+          } @else {
+            Iniciar Sesión
+          }
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 mt-6">SpaGrace v2.0 &mdash; Gestión de Spa</p>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="close.emit()"></div>
+  <div class="relative bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-lg font-semibold text-spa-dark">
+        @if (mode() === 'adelanto') { Registrar Adelanto }
+        @else if (mode() === 'final') { Registrar Pago Final }
+        @else if (mode() === 'reembolso') { Reembolsar Adelanto }
+        @else { Aplicar Descuento }
+      </h2>
+      <button class="text-gray-400 hover:text-gray-600" (click)="close.emit()">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Summary -->
+    <div class="bg-gray-50 rounded-lg p-4 mb-4 space-y-1 text-sm">
+      <p><span class="text-gray-500">Monto total:</span> <strong>{{ turno().precioTotal | currencyArs }}</strong></p>
+      <p><span class="text-gray-500">Adelanto:</span> {{ turno().cobro?.montoAdelanto ?? 0 | currencyArs }}</p>
+      <p><span class="text-gray-500">Pendiente:</span> <strong class="text-red-600">{{ turno().cobro?.montoPendiente ?? 0 | currencyArs }}</strong></p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      @if (mode() === 'adelanto') {
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Monto del adelanto *</label>
+          <input type="number" class="input-spa" formControlName="montoAdelanto" min="1" [max]="turno().cobro?.montoPendiente" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Método de pago *</label>
+          <select class="input-spa" formControlName="metodoPagoAdelanto">
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="tarjeta_debito">Tarjeta Débito</option>
+            <option value="tarjeta_credito">Tarjeta Crédito</option>
+            <option value="mercadopago">MercadoPago</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      }
+
+      @if (mode() === 'final') {
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Método de pago *</label>
+          <select class="input-spa" formControlName="metodoPagoFinal">
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="tarjeta_debito">Tarjeta Débito</option>
+            <option value="tarjeta_credito">Tarjeta Crédito</option>
+            <option value="mercadopago">MercadoPago</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      }
+
+      @if (mode() === 'reembolso') {
+        <p class="text-sm text-gray-600">Se reembolsará el adelanto de <strong>{{ turno().cobro?.montoAdelanto ?? 0 | currencyArs }}</strong>. Esta acción no se puede deshacer.</p>
+      }
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Notas (opcional)</label>
+        <input type="text" class="input-spa" formControlName="notas" placeholder="Notas..." />
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" class="btn-spa-secondary" (click)="close.emit()">Cancelar</button>
+        <button
+          type="submit"
+          class="btn-spa-primary"
+          [class.btn-spa-danger]="mode() === 'reembolso'"
+          [disabled]="isSubmitting() || (mode() !== 'reembolso' && form.invalid)"
+        >
+          @if (isSubmitting()) { Procesando... }
+          @else if (mode() === 'adelanto') { Registrar Adelanto }
+          @else if (mode() === 'final') { Registrar Pago Final }
+          @else if (mode() === 'reembolso') { Reembolsar }
+          @else { Aplicar }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
