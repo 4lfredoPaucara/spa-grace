@@ -11,6 +11,7 @@ import { UsersModule } from './modules/users/users.module';
 import { EspecialidadesModule } from './modules/especialidades/especialidades.module';
 import { ServiciosModule } from './modules/servicios/servicios.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
+import { EmpleadosModule } from './modules/empleados/empleados.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ClientesModule } from './modules/clientes/clientes.module';
     EspecialidadesModule,
     ServiciosModule,
     ClientesModule,
+    EmpleadosModule,
   ],
   providers: [
     {
