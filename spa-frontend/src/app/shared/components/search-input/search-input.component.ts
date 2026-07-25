@@ -37,14 +37,14 @@ export class SearchInputComponent {
   readonly placeholder = input('Buscar...');
   readonly debounce = input(300);
 
-  readonly valueChange = output<string>();
+  readonly search = output<string>();
 
   private searchSubject = new Subject<string>();
 
   constructor() {
     this.searchSubject
       .pipe(debounceTime(this.debounce()), distinctUntilChanged())
-      .subscribe((val) => this.valueChange.emit(val));
+      .subscribe((val) => this.search.emit(val));
   }
 
   onInput(val: string) {
@@ -54,6 +54,6 @@ export class SearchInputComponent {
 
   clear() {
     this.value.set('');
-    this.valueChange.emit('');
+    this.search.emit('');
   }
 }

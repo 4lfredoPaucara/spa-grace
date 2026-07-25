@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DisponibilidadService } from '../../services/disponibilidad.service';
-import { EmpleadosService } from '../../services/empleados.service';
+import { DisponibilidadService } from '../../../services/disponibilidad.service';
+import { EmpleadosService } from '../../../services/empleados.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
@@ -43,6 +43,11 @@ export class DisponibilidadComponent {
     });
   }
 
+  onSelectChange(event: Event): void {
+    const id = +(event.target as HTMLSelectElement).value;
+    if (id) this.loadDisponibilidad(id);
+  }
+
   loadDisponibilidad(id: number): void {
     this.selectedEmpleado.set(id);
     this.loading.set(true);
@@ -77,9 +82,9 @@ export class DisponibilidadComponent {
     });
   }
 
-  getDiaLabel(dia: DiaSemana): string { return DIAS_SEMANA_LABELS[dia]; }
+  getDiaLabel(dia: string): string { return DIAS_SEMANA_LABELS[dia as DiaSemana] || dia; }
 
-  getBloquesPorDia(dia: DiaSemana): Disponibilidad[] {
+  getBloquesPorDia(dia: string): Disponibilidad[] {
     return this.disponibilidades().filter((d) => d.diaSemana === dia);
   }
 }

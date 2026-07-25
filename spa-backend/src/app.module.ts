@@ -8,6 +8,9 @@ import jwtConfig from './config/jwt.config';
 import appConfig from './config/app.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { EspecialidadesModule } from './modules/especialidades/especialidades.module';
+import { ServiciosModule } from './modules/servicios/servicios.module';
+import { ClientesModule } from './modules/clientes/clientes.module';
 
 @Module({
   imports: [
@@ -43,6 +46,9 @@ import { UsersModule } from './modules/users/users.module';
     }),
     AuthModule,
     UsersModule,
+    EspecialidadesModule,
+    ServiciosModule,
+    ClientesModule,
   ],
   providers: [
     {

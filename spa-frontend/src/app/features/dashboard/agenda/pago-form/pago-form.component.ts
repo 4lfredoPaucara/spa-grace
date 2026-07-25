@@ -1,9 +1,9 @@
 import { Component, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CobrosService } from '../../../services/cobros.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import { CurrencyArsPipe } from '../../../../shared/'pipes/currency.pipe';
-import type { Turno } from '../../../../core/'models/turno.model';
+import { CobrosService } from '../../../../services/cobros.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import { CurrencyArsPipe } from '../../../../shared/pipes/currency.pipe';
+import type { Turno } from '../../../../core/models/turno.model';
 
 @Component({
   selector: 'app-pago-form',

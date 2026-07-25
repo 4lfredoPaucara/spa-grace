@@ -1,10 +1,10 @@
 import { Component, inject, output, input, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PagosEmpleadosService } from '../../../services/pagos-empleados.service';
-import { EmpleadosService } from '../../../services/empleados.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import type { PagoEmpleado } from '../../../../core/'models/pago-empleado.model';
-import type { Empleado } from '../../../../core/'models/empleado.model';
+import { PagosEmpleadosService } from '../../../../services/pagos-empleados.service';
+import { EmpleadosService } from '../../../../services/empleados.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import type { PagoEmpleado } from '../../../../core/models/pago-empleado.model';
+import type { Empleado } from '../../../../core/models/empleado.model';
 
 @Component({
   selector: 'app-pago-empleado-form',

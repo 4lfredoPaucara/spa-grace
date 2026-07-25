@@ -1,9 +1,9 @@
 import { Component, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ServiciosService } from '../../../services/servicios.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import type { Servicio } from '../../../../core/'models/servicio.model';
-import type { CategoriaServicio } from '../../../../core/'models/servicio.model';
+import { ServiciosService } from '../../../../services/servicios.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import type { Servicio } from '../../../../core/models/servicio.model';
+import type { CategoriaServicio } from '../../../../core/models/servicio.model';
 
 @Component({
   selector: 'app-servicio-form',

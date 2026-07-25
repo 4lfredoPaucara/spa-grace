@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TurnosService } from '../../services/turnos.service';
-import { CobrosService } from '../../services/cobros.service';
+import { TurnosService } from '../../../services/turnos.service';
+import { CobrosService } from '../../../services/cobros.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';

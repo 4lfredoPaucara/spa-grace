@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { PromocionesService } from '../../services/promociones.service';
+import { PromocionesService } from '../../../services/promociones.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';

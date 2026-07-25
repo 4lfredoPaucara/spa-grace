@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal, computed } from '@angular/core';
 import { CurrencyArsPipe } from '../../../shared/pipes/currency.pipe';
-import { ReportsService } from '../../services/reports.service';
+import { ReportsService } from '../../../services/reports.service';
 
 @Component({
   selector: 'app-home',

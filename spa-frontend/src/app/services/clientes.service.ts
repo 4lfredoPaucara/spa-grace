@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import type { Cliente } from '../../core/models/cliente.model';
-import type { Turno } from '../../core/models/turno.model';
-import type { HistorialClinico } from '../../core/models/historial.model';
-import type { ApiResponse, PaginatedResponse } from '../../core/interfaces/api-response.interface';
+import { environment } from '../../environments/environment';
+import type { Cliente } from '../core/models/cliente.model';
+import type { Turno } from '../core/models/turno.model';
+import type { HistorialClinico } from '../core/models/historial.model';
+import type { ApiResponse, PaginatedResponse } from '../core/interfaces/api-response.interface';
 
 @Injectable({ providedIn: 'any' })
 export class ClientesService {

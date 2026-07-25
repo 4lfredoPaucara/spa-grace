@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-bold text-spa-dark">Disponibilidad</h1>
 
   <div class="flex items-center gap-4">
-    <select class="input-spa max-w-xs" [value]="selectedEmpleado() || ''" (change)="loadDisponibilidad(+($any($event.target).value))">
+    <select class="input-spa max-w-xs" [value]="selectedEmpleado() || ''" (change)="onSelectChange($event)">
       <option value="" disabled>Seleccionar empleado</option>
       @for (e of empleados(); track e.id) {
         <option [value]="e.id">{{ e.usuario?.nombre }}</option>

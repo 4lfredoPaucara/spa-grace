@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { PagosEmpleadosService } from '../../services/pagos-empleados.service';
-import { EmpleadosService } from '../../services/empleados.service';
+import { PagosEmpleadosService } from '../../../services/pagos-empleados.service';
+import { EmpleadosService } from '../../../services/empleados.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';

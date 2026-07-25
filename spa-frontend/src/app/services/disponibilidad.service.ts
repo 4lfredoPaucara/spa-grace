@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import type { Disponibilidad } from '../../core/models/disponibilidad.model';
-import type { ApiResponse } from '../../core/interfaces/api-response.interface';
+import { environment } from '../../environments/environment';
+import type { Disponibilidad } from '../core/models/disponibilidad.model';
+import type { ApiResponse } from '../core/interfaces/api-response.interface';
 
 @Injectable({ providedIn: 'any' })
 export class DisponibilidadService {

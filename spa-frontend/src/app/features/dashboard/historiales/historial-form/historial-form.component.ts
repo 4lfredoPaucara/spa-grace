@@ -1,8 +1,8 @@
 import { Component, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HistorialesService } from '../../../services/historiales.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import type { HistorialClinico } from '../../../../core/'models/historial.model';
+import { HistorialesService } from '../../../../services/historiales.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import type { HistorialClinico } from '../../../../core/models/historial.model';
 
 @Component({
   selector: 'app-historial-form',

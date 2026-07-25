@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ClientesService } from '../../services/clientes.service';
+import { ClientesService } from '../../../services/clientes.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';

@@ -1,10 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, ManyToMany, OneToMany, JoinColumn } from 'typeorm';
+import { CategoriaServicio } from './categoria-servicio.entity';
 import { Empleado } from '../../empleados/entities/empleado.entity';
+import { TipoServicio } from '../../../common/enums';
 
 @Entity('servicios')
 export class Servicio {
   @PrimaryGeneratedColumn('increment')
   id: number;
+
+  @ManyToOne(() => CategoriaServicio, { nullable: true })
+  @JoinColumn({ name: 'id_categoria' })
+  categoria: CategoriaServicio | null;
 
   @Column({ type: 'varchar', length: 100 })
   nombre: string;
@@ -17,6 +23,9 @@ export class Servicio {
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio: number;
+
+  @Column({ type: 'enum', enum: TipoServicio, default: TipoServicio.PRINCIPAL })
+  tipo: TipoServicio;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   imagen_url: string | null;
@@ -31,6 +40,7 @@ export class Servicio {
   @JoinColumn({ name: 'parent_servicio_id' })
   parentServicio: Servicio | null;
 
+  @OneToMany(() => Servicio, (servicio) => servicio.parentServicio)
   addons: Servicio[];
 
   @CreateDateColumn({ type: 'timestamp' })

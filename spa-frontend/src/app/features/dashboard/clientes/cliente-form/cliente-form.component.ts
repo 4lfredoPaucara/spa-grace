@@ -1,8 +1,8 @@
 import { Component, computed, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ClientesService } from '../../../services/clientes.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import type { Cliente } from '../../../../core/'models/cliente.model';
+import { ClientesService } from '../../../../services/clientes.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import type { Cliente } from '../../../../core/models/cliente.model';
 
 @Component({
   selector: 'app-cliente-form',
@@ -51,10 +51,13 @@ export class ClienteFormComponent {
     if (this.form.invalid) { this.toast.show('Completá los campos requeridos', 'warning'); return; }
     this.isSubmitting.set(true);
     const data = this.form.getRawValue();
-    const payload = {
+    const payload: Record<string, unknown> = {
       usuario: { nombre: data.nombre, email: data.email, phone: data.telefono },
-      ...data,
-      nombre: undefined, email: undefined, telefono: undefined,
+      direccion: data.direccion,
+      ocupacion: data.ocupacion,
+      comoConocio: data.comoConocio,
+      alergias: data.alergias,
+      notasInternas: data.notasInternas,
     };
     const c = this.cliente();
     const req = c ? this.clientesService.update(c.id, payload) : this.clientesService.create(payload);

@@ -1,11 +1,11 @@
 import { Component, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmpleadosService } from '../../../services/empleados.service';
-import { ServiciosService } from '../../../services/servicios.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import { passwordValidator } from '../../../../shared/'validators/password.validator';
-import type { Empleado } from '../../../../core/'models/empleado.model';
-import type { Servicio, CategoriaServicio } from '../../../../core/'models/servicio.model';
+import { EmpleadosService } from '../../../../services/empleados.service';
+import { ServiciosService } from '../../../../services/servicios.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import { passwordValidator } from '../../../../shared/validators/password.validator';
+import type { Empleado } from '../../../../core/models/empleado.model';
+import type { Servicio, CategoriaServicio } from '../../../../core/models/servicio.model';
 
 @Component({
   selector: 'app-empleado-form',

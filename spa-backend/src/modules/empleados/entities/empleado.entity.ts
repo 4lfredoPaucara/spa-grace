@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToMany, ManyToOne, JoinTable } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Servicio } from '../../servicios/entities/servicio.entity';
+import { Especialidad } from '../../especialidades/entities/especialidad.entity';
 
 @Entity('empleados')
 export class Empleado {
@@ -14,8 +15,12 @@ export class Empleado {
   @JoinColumn({ name: 'id_usuario' })
   usuario: User;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  especialidad: string | null;
+  @Column({ type: 'int', nullable: true })
+  id_especialidad: number | null;
+
+  @ManyToOne(() => Especialidad, { nullable: true })
+  @JoinColumn({ name: 'id_especialidad' })
+  especialidad: Especialidad | null;
 
   @Column({ type: 'boolean', default: true })
   activo: boolean;

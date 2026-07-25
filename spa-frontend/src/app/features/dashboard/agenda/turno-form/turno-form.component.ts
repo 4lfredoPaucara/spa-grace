@@ -1,13 +1,13 @@
 import { Component, inject, output, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { ClientesService } from '../../../services/clientes.service';
-import { EmpleadosService } from '../../../services/empleados.service';
-import { ServiciosService } from '../../../services/servicios.service';
-import { TurnosService } from '../../../services/turnos.service';
-import { ToastService } from '../../../../shared/'components/toast-notification/toast.service';
-import { CurrencyArsPipe } from '../../../../shared/'pipes/currency.pipe';
-import type { Servicio } from '../../../../core/'models/servicio.model';
+import { ClientesService } from '../../../../services/clientes.service';
+import { EmpleadosService } from '../../../../services/empleados.service';
+import { ServiciosService } from '../../../../services/servicios.service';
+import { TurnosService } from '../../../../services/turnos.service';
+import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
+import { CurrencyArsPipe } from '../../../../shared/pipes/currency.pipe';
+import type { Servicio } from '../../../../core/models/servicio.model';
 
 @Component({
   selector: 'app-turno-form',
