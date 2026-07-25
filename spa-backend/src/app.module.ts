@@ -30,8 +30,9 @@ import { EmpleadosModule } from './modules/empleados/empleados.module';
         password: dbConfig.password,
         database: dbConfig.database,
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
         logging: false,
+        invalidWhereValuesBehavior: { null: 'ignore' },
       }),
     }),
     ThrottlerModule.forRootAsync({
