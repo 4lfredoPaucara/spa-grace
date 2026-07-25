@@ -1,0 +1,32 @@
+# Dependencies
+spa-backend/node_modules/
+spa-frontend/node_modules/
+
+# Build output
+spa-backend/dist/
+spa-frontend/dist/
+
+# Environment files (con datos sensibles)
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Angular cache
+.angular/
