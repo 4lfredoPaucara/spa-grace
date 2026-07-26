@@ -7,6 +7,9 @@ export class Disponibilidad {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @Column({ type: 'int' })
+  id_empleado: number;
+
   @ManyToOne(() => Empleado)
   @JoinColumn({ name: 'id_empleado' })
   empleado: Empleado;

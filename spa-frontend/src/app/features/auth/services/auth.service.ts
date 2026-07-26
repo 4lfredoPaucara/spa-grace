@@ -21,7 +21,7 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
-  private readonly currentUserSignal = signal<User | null>(null);
+  private readonly currentUserSignal = signal<User | null>(this.getUserFromStorage());
 
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
@@ -66,10 +66,21 @@ export class AuthService {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.clear();
+    
     this.currentUserSignal.set(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload(); 
+    });
   }
 
+  private getUserFromStorage() {
+    // Tu lógica para leer el token/usuario
+    const token = localStorage.getItem('token');
+    return token ? JSON.parse(atob(token.split('.')[1])) : null;
+  }
+  
   private loadUserFromStorage(): void {
     const userStr = localStorage.getItem('user');
     if (userStr) {

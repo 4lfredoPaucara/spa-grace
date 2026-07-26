@@ -14,6 +14,10 @@ import { ClientesModule } from './modules/clientes/clientes.module';
 import { EmpleadosModule } from './modules/empleados/empleados.module';
 import { TurnosModule } from './modules/turnos/turnos.module';
 import { CobrosModule } from './modules/cobros/cobros.module';
+import { DisponibilidadModule } from './modules/disponibilidad/disponibilidad.module';
+import { HistorialesModule } from './modules/historiales/historiales.module';
+import { PromocionesModule } from './modules/promociones/promociones.module';
+import { PagosEmpleadosModule } from './modules/pagos-empleados/pagos-empleados.module';
 
 @Module({
   imports: [
@@ -56,6 +60,10 @@ import { CobrosModule } from './modules/cobros/cobros.module';
     EmpleadosModule,
     TurnosModule,
     CobrosModule,
+    DisponibilidadModule,
+    HistorialesModule,
+    PromocionesModule,
+    PagosEmpleadosModule,
   ],
   providers: [
     {

@@ -1,4 +1,5 @@
 import { Component, inject, computed, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
@@ -12,11 +13,11 @@ import { AuthService } from '../../auth/services/auth.service';
       </div>
 
       <div class="flex items-center gap-4">
-        <div class="relative">
+        <div class="relative header-user-menu">
           <button
             type="button"
-            (click)="toggleMenu()"
-            class="flex items-center gap-3 p-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+            (click)="toggleMenu($event)"
+            class="flex items-center gap-3 p-1.5 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
           >
             <div class="h-9 w-9 rounded-full bg-spa-primary/10 flex items-center justify-center text-spa-primary font-semibold text-sm ring-2 ring-spa-primary/20">
               {{ userInitials() }}
@@ -36,15 +37,18 @@ import { AuthService } from '../../auth/services/auth.service';
                 <p class="text-sm font-medium text-spa-dark">{{ userName() }}</p>
                 <p class="text-xs text-gray-400">{{ userEmail() }}</p>
               </div>
-              <a
-                (click)="logout()"
-                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
+              
+              <!-- Usamos (mousedown) para capturar el click instantáneamente antes de que se destruya el elemento -->
+              <button
+                type="button"
+                (mousedown)="logout($event)"
+                class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 cursor-pointer border-none bg-transparent"
               >
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>
                 </svg>
-                Cerrar Sesión
-              </a>
+                <span>Cerrar Sesión</span>
+              </button>
             </div>
           }
         </div>
@@ -57,17 +61,18 @@ import { AuthService } from '../../auth/services/auth.service';
 })
 export class HeaderComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   readonly menuOpen = signal(false);
 
-  readonly userRole = computed(() => this.authService.userRole());
+  readonly userRole = computed(() => this.authService.userRole?.() ?? 'Admin');
 
   readonly userName = computed(() => {
-    return this.authService.currentUser()?.nombre ?? 'Usuario';
+    return this.authService.currentUser?.()?.nombre ?? 'Usuario';
   });
 
   readonly userEmail = computed(() => {
-    return this.authService.currentUser()?.email ?? '';
+    return this.authService.currentUser?.()?.email ?? '';
   });
 
   readonly userInitials = computed(() => {
@@ -79,19 +84,39 @@ export class HeaderComponent {
     return name.substring(0, 2).toUpperCase();
   });
 
-  toggleMenu() {
+  toggleMenu(event: MouseEvent) {
+    event.stopPropagation();
     this.menuOpen.update((v) => !v);
   }
 
   onDocumentClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!target.closest('.relative')) {
+    if (!target.closest('.header-user-menu')) {
       this.menuOpen.set(false);
     }
   }
 
-  logout() {
+  logout(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     this.menuOpen.set(false);
-    this.authService.logout();
+
+    // 1. Limpiar almacenamiento
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // 2. Notificar al AuthService
+    try {
+      this.authService.logout();
+    } catch (e) {
+      console.error('Error al ejecutar authService.logout():', e);
+    }
+
+    // 3. Salida garantizada: Redirección directa por navegador
+    // Esto evita que te quedes atrapado en la memoria de Angular
+    window.location.href = '/login';
   }
 }

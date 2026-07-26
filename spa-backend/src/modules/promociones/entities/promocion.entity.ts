@@ -39,6 +39,9 @@ export class Promocion {
   @JoinColumn({ name: 'id_servicio_aplicable' })
   servicioAplicable: Servicio | null;
 
+  @Column({ type: 'int' })
+  creado_por_id: number;
+
   @ManyToOne(() => User)
   @JoinColumn({ name: 'creado_por_id' })
   creadoPor: User;

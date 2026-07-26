@@ -2,10 +2,12 @@ import { Component, inject, output, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmpleadosService } from '../../../../services/empleados.service';
 import { ServiciosService } from '../../../../services/servicios.service';
+import { EspecialidadesService } from '../../../../services/especialidades.service';
 import { ToastService } from '../../../../shared/components/toast-notification/toast.service';
 import { passwordValidator } from '../../../../shared/validators/password.validator';
 import type { Empleado } from '../../../../core/models/empleado.model';
 import type { Servicio, CategoriaServicio } from '../../../../core/models/servicio.model';
+import type { Especialidad } from '../../../../services/especialidades.service';
 
 @Component({
   selector: 'app-empleado-form',
@@ -17,6 +19,7 @@ export class EmpleadoFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly empleadosService = inject(EmpleadosService);
   private readonly serviciosService = inject(ServiciosService);
+  private readonly especialidadesService = inject(EspecialidadesService);
   private readonly toast = inject(ToastService);
 
   readonly empleado = input<Empleado | null>(null);
@@ -24,7 +27,7 @@ export class EmpleadoFormComponent {
   readonly saved = output<void>();
 
   readonly isSubmitting = signal(false);
-  readonly especialidades = signal<any[]>([]);
+  readonly especialidades = signal<Especialidad[]>([]);
   readonly categorias = signal<CategoriaServicio[]>([]);
   readonly serviciosPorCategoria = signal<{ categoria: CategoriaServicio; servicios: Servicio[] }[]>([]);
   readonly selectedServicios = signal<Set<number>>(new Set());
@@ -65,6 +68,9 @@ export class EmpleadoFormComponent {
   }
 
   cargarDatos(): void {
+    this.especialidadesService.findAll().subscribe({
+      next: (res) => this.especialidades.set(res.data),
+    });
     this.serviciosService.findAll({ activo: true, limit: 100 }).subscribe({
       next: (res) => {
         const categorias = new Map<number, { categoria: CategoriaServicio; servicios: Servicio[] }>();

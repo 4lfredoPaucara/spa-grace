@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, switchMap, throwError, BehaviorSubject, filter, take } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -35,7 +36,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
           }
 
           return http.post<{ data: { accessToken: string; refreshToken: string } }>(
-            'http://localhost:3000/api/v1/auth/refresh',
+            `${environment.apiUrl}/auth/refresh`,
             { refreshToken }
           ).pipe(
             switchMap((response) => {
