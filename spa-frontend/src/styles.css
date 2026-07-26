@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ==========================================================
+   1. VARIABLES DE TEMA (Tailwind v4 Theme Configuration)
+   ========================================================== */
 @theme {
   --color-spa-primary: #8B5CF6;
   --color-spa-secondary: #EC4899;
@@ -8,45 +11,95 @@
   --color-spa-light: #F8FAFC;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* ==========================================================
+   2. REGLAS BASE GLOBALES
+   ========================================================== */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #F8FAFC;
-  color: #1E293B;
+  background-color: var(--color-spa-light);
+  color: var(--color-spa-dark);
   min-height: 100vh;
 }
 
+/* Normalización global para SVGs */
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.25rem;  /* 20px de tamaño estándar por defecto */
+  height: 1.25rem;
+  flex-shrink: 0;  /* Impide que Flexbox deforme o aplaste el icono */
+}
+
+/* ==========================================================
+   3. ARREGLO GLOBAL PARA CAMPOS CON ICONO Y NAVEGACIÓN
+   ========================================================== */
+
+/* Alineación de contenedor relativo */
+.relative {
+  display: flex;
+  align-items: center;
+}
+
+/* Centrado vertical perfecto para iconos en posicionamiento absoluto */
+.relative > svg.absolute,
+.relative > div.absolute {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Alineación estándar de iconos e ítems de menú (Sidebar / Navbar) */
+nav a, 
+nav button, 
+.sidebar-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/* ==========================================================
+   4. COMPONENTES Y CLASES CUSTOM (.input-spa, .btn-spa, etc.)
+   ========================================================== */
+
+/* --- Inputs --- */
 .input-spa {
   width: 100%;
   border-radius: 0.5rem;
   border: 1px solid #D1D5DB;
   padding: 0.625rem 1rem;
-  transition: all 200ms;
+  background-color: #ffffff;
+  transition: all 200ms ease-in-out;
+}
+
+/* Cuando el input está dentro de un contenedor .relative con icono */
+.relative > input.input-spa {
+  padding-left: 2.75rem !important; /* Reservamos espacio exacto para el icono */
 }
 
 .input-spa:focus {
   outline: none;
-  border-color: #8B5CF6;
-  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+  border-color: var(--color-spa-primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
+/* --- Botones --- */
 .btn-spa-primary {
-  background-color: #8B5CF6;
-  color: white;
+  background-color: var(--color-spa-primary);
+  color: #ffffff;
   padding: 0.625rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 500;
   border: none;
   cursor: pointer;
-  transition: background-color 200ms;
+  transition: background-color 200ms ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-center: center;
+  gap: 0.5rem;
 }
 
-.btn-spa-primary:hover {
+.btn-spa-primary:hover:not(:disabled) {
   background-color: rgba(139, 92, 246, 0.9);
 }
 
@@ -56,37 +109,46 @@ body {
 }
 
 .btn-spa-secondary {
-  background-color: white;
-  color: #1E293B;
+  background-color: #ffffff;
+  color: var(--color-spa-dark);
   padding: 0.625rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 500;
   border: 1px solid #D1D5DB;
   cursor: pointer;
-  transition: all 200ms;
+  transition: all 200ms ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-center: center;
+  gap: 0.5rem;
 }
 
-.btn-spa-secondary:hover {
-  background-color: #F8FAFC;
+.btn-spa-secondary:hover:not(:disabled) {
+  background-color: var(--color-spa-light);
 }
 
 .btn-spa-danger {
   background-color: #EF4444;
-  color: white;
+  color: #ffffff;
   padding: 0.625rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 500;
   border: none;
   cursor: pointer;
-  transition: background-color 200ms;
+  transition: background-color 200ms ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-center: center;
+  gap: 0.5rem;
 }
 
-.btn-spa-danger:hover {
+.btn-spa-danger:hover:not(:disabled) {
   background-color: #DC2626;
 }
 
+/* --- Tarjetas, Badges y Tablas --- */
 .spa-card {
-  background: white;
+  background: #ffffff;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #E5E7EB;
@@ -115,7 +177,7 @@ body {
   text-transform: uppercase;
   color: #64748B;
   border-bottom: 1px solid #E5E7EB;
-  background: #F8FAFC;
+  background: var(--color-spa-light);
 }
 
 .spa-table td {
@@ -125,5 +187,5 @@ body {
 }
 
 .spa-table tr:hover {
-  background-color: #F8FAFC;
+  background-color: var(--color-spa-light);
 }

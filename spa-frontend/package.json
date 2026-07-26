@@ -3,8 +3,13 @@
   "version": "2.0.0",
   "scripts": {
     "ng": "ng",
+    "tw": "npx @tailwindcss/cli -i src/styles.css -o src/styles.tw.css --minify",
+    "tw:watch": "npx @tailwindcss/cli -i src/styles.css -o src/styles.tw.css --minify --watch",
+    "prestart": "npm run tw",
     "start": "ng serve",
+    "prebuild": "npm run tw",
     "build": "ng build",
+    "start:dev": "npm run tw && ng serve & npm run tw:watch",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

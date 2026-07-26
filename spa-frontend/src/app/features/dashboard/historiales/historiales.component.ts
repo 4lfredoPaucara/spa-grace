@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HistorialesService } from '../../../services/historiales.service';
 import { ToastService } from '../../../shared/components/toast-notification/toast.service';
-import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { HistorialFormComponent } from './historial-form/historial-form.component';
@@ -12,7 +11,7 @@ import type { HistorialClinico } from '../../../core/models/historial.model';
 @Component({
   selector: 'app-historiales',
   standalone: true,
-  imports: [FormsModule, ConfirmModalComponent, LoadingSpinnerComponent, EmptyStateComponent, HistorialFormComponent, ReadableDatePipe],
+  imports: [FormsModule, LoadingSpinnerComponent, EmptyStateComponent, HistorialFormComponent, ReadableDatePipe],
   templateUrl: './historiales.component.html',
 })
 export class HistorialesComponent {

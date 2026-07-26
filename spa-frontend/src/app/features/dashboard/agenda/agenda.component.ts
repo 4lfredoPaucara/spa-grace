@@ -12,7 +12,6 @@ import { TurnoFormComponent } from './turno-form/turno-form.component';
 import { PagoFormComponent } from './pago-form/pago-form.component';
 import { CurrencyArsPipe } from '../../../shared/pipes/currency.pipe';
 import { ReadableDatePipe } from '../../../shared/pipes/readable-date.pipe';
-import { EstadoColorPipe, EstadoLabelPipe } from '../../../shared/pipes/estado-color.pipe';
 import type { Turno } from '../../../core/models/turno.model';
 import type { EstadoTurno } from '../../../core/enums/estado-turno.enum';
 import { ESTADO_TURNO_COLORS, ESTADO_TURNO_LABELS } from '../../../core/enums/estado-turno.enum';
@@ -35,7 +34,7 @@ const TABS: Tab[] = [
   imports: [
     FormsModule, SearchInputComponent, StatusBadgeComponent, ConfirmModalComponent,
     LoadingSpinnerComponent, EmptyStateComponent, TurnoFormComponent, PagoFormComponent,
-    CurrencyArsPipe, ReadableDatePipe, EstadoColorPipe, EstadoLabelPipe,
+    CurrencyArsPipe, ReadableDatePipe,
   ],
   templateUrl: './agenda.component.html',
 })
