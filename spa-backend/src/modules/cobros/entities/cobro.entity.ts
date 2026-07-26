@@ -7,6 +7,9 @@ export class Cobro {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @Column({ type: 'int' })
+  id_turno: number;
+
   @OneToOne(() => Turno)
   @JoinColumn({ name: 'id_turno' })
   turno: Turno;

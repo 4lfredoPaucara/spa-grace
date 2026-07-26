@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, ManyToMany, OneToOne, JoinTable, JoinColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Empleado } from '../../empleados/entities/empleado.entity';
 import { Servicio } from '../../servicios/entities/servicio.entity';
+import { Cobro } from '../../cobros/entities/cobro.entity';
 import { EstadoTurno } from '../../../common/enums';
 
 @Entity('turnos')
@@ -43,6 +44,9 @@ export class Turno {
   @Column({ type: 'text', nullable: true })
   notas_turno: string | null;
 
+  @OneToOne(() => Cobro, (cobro) => cobro.turno)
+  cobro: Cobro;
+
   @CreateDateColumn({ type: 'timestamp' })
   fecha_creacion: Date;
 
@@ -51,4 +55,7 @@ export class Turno {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  deleted_at: Date | null;
 }

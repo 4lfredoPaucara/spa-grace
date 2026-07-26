@@ -12,6 +12,8 @@ import { EspecialidadesModule } from './modules/especialidades/especialidades.mo
 import { ServiciosModule } from './modules/servicios/servicios.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
 import { EmpleadosModule } from './modules/empleados/empleados.module';
+import { TurnosModule } from './modules/turnos/turnos.module';
+import { CobrosModule } from './modules/cobros/cobros.module';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { EmpleadosModule } from './modules/empleados/empleados.module';
     ServiciosModule,
     ClientesModule,
     EmpleadosModule,
+    TurnosModule,
+    CobrosModule,
   ],
   providers: [
     {
